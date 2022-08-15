@@ -15,14 +15,59 @@ import {
 } from "@ionic/react";
 import React, { useState } from "react";
 
+import { collection, addDoc } from "firebase/firestore";
+import { firebaseFireStoreDB } from "../../firebase/config";
+import { getAuth } from "firebase/auth";
+import { useHistory } from "react-router";
+
 const AddWord = () => {
   const [word, setWord] = useState<string>();
   const [translate, setTraslate] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const saveTheWord = () => {
+  const history = useHistory();
+
+  const addWordSuccess = () => {
+    setWord("");
+    setTraslate("");
+    history.push("home");
+  };
+
+  const getCurrentUserId = async () => {
+    try {
+      const auth = await getAuth();
+      const user = auth.currentUser;
+      console.log("user info", user);
+      return user?.uid;
+    } catch (error: any) {
+      console.log("cannot get user info");
+      throw error;
+    }
+  };
+
+  const saveTheWord = async () => {
     setLoading(true);
     console.log(word, translate);
+    if (!translate || !translate) return;
+
+    //
+    try {
+      const uid = await getCurrentUserId();
+      const docRef = await addDoc(collection(firebaseFireStoreDB, "words"), {
+        word,
+        translate,
+        user: uid,
+        history: [],
+        success: 0,
+        failer: 0,
+      });
+      console.log("Document written with ID: ", docRef.id);
+      setLoading(false);
+      addWordSuccess();
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      setLoading(false);
+    }
   };
 
   return (
