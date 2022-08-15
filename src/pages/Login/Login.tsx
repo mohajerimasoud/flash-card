@@ -33,12 +33,6 @@ const Login: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {/* <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
-          </IonToolbar>
-        </IonHeader> */}
-
         <IonButton onClick={googleLoginHandler} color="danger" expand="block">
           <IonIcon icon={logoGoogle} />
         </IonButton>

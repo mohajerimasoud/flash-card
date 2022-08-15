@@ -41,7 +41,7 @@ const AddWord = () => {
       return user?.uid;
     } catch (error: any) {
       console.log("cannot get user info");
-      throw error;
+      history.push("/login");
     }
   };
 
@@ -60,7 +60,7 @@ const AddWord = () => {
         history: [],
         success: 0,
         failer: 0,
-				createdDate : Date.now()
+        createdDate: Date.now(),
       });
       console.log("Document written with ID: ", docRef.id);
       setLoading(false);

@@ -23,6 +23,7 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import Login from "./pages/Login/Login";
 import AddWord from "./pages/AddWord/AddWord";
+import Review from "./pages/Review/Review";
 
 setupIonicReact();
 
@@ -35,6 +36,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/add-word">
           <AddWord />
+        </Route>
+        <Route exact path="/review">
+          <Review />
         </Route>
         <Route exact path="/login">
           <Login />

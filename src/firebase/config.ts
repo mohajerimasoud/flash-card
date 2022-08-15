@@ -1,6 +1,15 @@
 import { initializeApp } from "firebase/app";
 import "firebase/auth";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  browserLocalPersistence,
+  browserPopupRedirectResolver,
+  browserSessionPersistence,
+  GoogleAuthProvider,
+  indexedDBLocalPersistence,
+  initializeAuth,
+  setPersistence,
+  signInWithPopup,
+} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 export const firebaseConfig = {
@@ -15,8 +24,21 @@ export const firebaseConfig = {
 // initialize app
 export const firebaseApp = initializeApp(firebaseConfig);
 // initialize modules
-export const firebaseAuth = getAuth(firebaseApp);
+// export const firebaseAuth = getAuth(firebaseApp);
+export const firebaseAuth = initializeAuth(firebaseApp, {
+  persistence: [
+    indexedDBLocalPersistence,
+    browserLocalPersistence,
+    browserSessionPersistence,
+  ],
+  popupRedirectResolver: browserPopupRedirectResolver,
+});
 export const firebaseFireStoreDB = getFirestore(firebaseApp);
+
+(async () => {
+  await setPersistence(firebaseAuth, browserLocalPersistence);
+})();
+
 // Google Auth
 export const googleAuthProvider = new GoogleAuthProvider();
 export const signinWithGoogle = () =>

@@ -9,28 +9,23 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonItem,
-  IonLabel,
   IonPage,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import {
   addCircleSharp,
-  caretDown,
-  caretForward,
   caretForwardCircle,
   checkmarkCircle,
-  checkmarkCircleOutline,
   closeCircle,
-  closeCircleOutline,
-  ticketOutline,
 } from "ionicons/icons";
 import { useHistory } from "react-router";
+import { EContentType } from "../../Types/app.types";
 import "./Home.css";
 
 const Home: React.FC = () => {
   const history = useHistory();
+
   return (
     <IonPage>
       <IonHeader>
@@ -61,8 +56,22 @@ const Home: React.FC = () => {
 
           <IonCardContent>
             <IonButtons>
-              <IonButton fill="solid">All words</IonButton>
-              <IonButton fill="solid">Review session</IonButton>
+              <IonButton
+                fill="solid"
+                onClick={() => {
+                  history.push(`/review?content=${EContentType.ALL}`);
+                }}
+              >
+                All words
+              </IonButton>
+              <IonButton
+                fill="solid"
+                onClick={() => {
+                  history.push(`/review?content=${EContentType.TO_REVIEW}`);
+                }}
+              >
+                Review session
+              </IonButton>
             </IonButtons>
           </IonCardContent>
         </IonCard>
