@@ -1,0 +1,7 @@
+{
+  "name": "flash-card",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
