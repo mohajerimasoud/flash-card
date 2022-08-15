@@ -1,29 +1,58 @@
 import {
+  IonButton,
+  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonIcon,
 } from "@ionic/react";
-import React from "react";
+import {
+  caretForwardCircle,
+  checkmarkCircle,
+  closeCircle,
+} from "ionicons/icons";
+import React, { useState } from "react";
 import { IWordType } from "../../Types/app.types";
 
 const WordReviewer: React.FC<{ word: IWordType }> = ({ word }) => {
+  const [ShowTranslate, setShowTranslate] = useState<boolean>(false);
+
   return (
     <IonCard>
       <IonCardHeader>
-        <IonCardTitle>Flash cards</IonCardTitle>
+        <IonCardTitle>{word.word}</IonCardTitle>
 
-        <IonCardSubtitle>All words : 22 - learend words : 33</IonCardSubtitle>
-        {/* <IonCardSubtitle>
-              <IonIcon color="success" icon={checkmarkCircle}></IonIcon>
-              <IonIcon color="danger" icon={closeCircle}></IonIcon>
-              <IonIcon color="primary" icon={caretForwardCircle}></IonIcon>
-              learend words : 33
-            </IonCardSubtitle> */}
+        <IonCardSubtitle>
+          {ShowTranslate ? (
+            word.translate
+          ) : (
+            <IonButton onClick={() => setShowTranslate(true)} fill="clear">
+              Show Translation
+            </IonButton>
+          )}
+        </IonCardSubtitle>
+        <IonCardSubtitle>
+          <IonIcon color="success" icon={checkmarkCircle} />
+          {word.success}
+          <IonIcon color="danger" icon={closeCircle} style={{ fontSize: 22 }} />
+          {word.failer}
+          <IonIcon color="primary" icon={caretForwardCircle} />
+          {word.history.length}
+        </IonCardSubtitle>
       </IonCardHeader>
 
-      <IonCardContent>{word.word}</IonCardContent>
+      <IonCardContent>
+        <IonButtons>
+          <IonButton fill="solid" color={"success"}>
+            I know it
+          </IonButton>
+          <IonButton fill="solid" color={"danger"}>
+            I don't know
+          </IonButton>
+        </IonButtons>
+      </IonCardContent>
     </IonCard>
   );
 };

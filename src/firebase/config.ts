@@ -24,7 +24,6 @@ export const firebaseConfig = {
 // initialize app
 export const firebaseApp = initializeApp(firebaseConfig);
 // initialize modules
-// export const firebaseAuth = getAuth(firebaseApp);
 export const firebaseAuth = initializeAuth(firebaseApp, {
   persistence: [
     indexedDBLocalPersistence,

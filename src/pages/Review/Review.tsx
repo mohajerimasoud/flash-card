@@ -17,7 +17,9 @@ import { useHistory } from "react-router";
 import { EContentType, IWordType } from "../../Types/app.types";
 import WordReviewer from "../../components/WordReviewer/WordReviewer";
 
-const Review = () => {
+import classes from "../../styles.module.css";
+
+const Review: React.FC = () => {
   const [userId, setUserId] = useState<string>();
   const [contentType, setContentType] = useState<EContentType>();
   const [words, setWords] = useState<IWordType[]>([]);
@@ -105,9 +107,13 @@ const Review = () => {
       </IonHeader>
       <IonContent fullscreen>
         {loading ? (
-          <IonSpinner />
+          <div className={classes["spinner-page-center"]}>
+            <IonSpinner />
+          </div>
         ) : (
-          words.map((word: IWordType) => <WordReviewer word={word} />)
+          words.map((word: IWordType) => (
+            <WordReviewer word={word} key={word.id} />
+          ))
         )}{" "}
       </IonContent>
     </IonPage>
