@@ -60,6 +60,7 @@ const AddWord = () => {
         history: [],
         success: 0,
         failer: 0,
+				createdDate : Date.now()
       });
       console.log("Document written with ID: ", docRef.id);
       setLoading(false);
