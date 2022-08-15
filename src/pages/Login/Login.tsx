@@ -10,13 +10,16 @@ import {
 } from "@ionic/react";
 import { logoGoogle } from "ionicons/icons";
 import { signinWithGoogle } from "../../firebase/config";
-import { GoogleAuthProvider } from "firebase/auth";
+import { useHistory } from "react-router";
 
-const Login = () => {
+const Login: React.FC = () => {
+  const history = useHistory();
+
   const googleLoginHandler = async () => {
     try {
       const login = await signinWithGoogle();
       console.log("google login success", login);
+      history.push("/home");
     } catch (error) {
       console.log("google login error");
     }
