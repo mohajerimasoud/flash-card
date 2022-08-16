@@ -77,6 +77,8 @@ const Review: React.FC = () => {
           where("success", "<", 8),
           orderBy("success"),
           orderBy("createdDate", "asc")
+          //       startAfter(lastVisible),
+          // limit(25)
         );
       }
       const docs = await getDocs(q);
@@ -94,7 +96,13 @@ const Review: React.FC = () => {
       console.log("error getting docs", error);
     }
   };
-
+  const deleteWordFromState = (id: string) => {
+    setWords((prev: IWordType[]) => {
+      return prev.filter((word: IWordType) => {
+        return word.id !== id;
+      });
+    });
+  };
   return (
     <IonPage>
       <IonHeader>
@@ -112,7 +120,11 @@ const Review: React.FC = () => {
           </div>
         ) : (
           words.map((word: IWordType) => (
-            <WordReviewer word={word} key={word.id} />
+            <WordReviewer
+              word={word}
+              key={word.id}
+              deleteWordFromState={deleteWordFromState}
+            />
           ))
         )}{" "}
       </IonContent>

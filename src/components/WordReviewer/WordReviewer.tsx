@@ -7,6 +7,7 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonIcon,
+  IonSpinner,
 } from "@ionic/react";
 import {
   caretForwardCircle,
@@ -14,10 +15,46 @@ import {
   closeCircle,
 } from "ionicons/icons";
 import React, { useState } from "react";
-import { IWordType } from "../../Types/app.types";
+import { EAnswerStatus, IWordType } from "../../Types/app.types";
 
-const WordReviewer: React.FC<{ word: IWordType }> = ({ word }) => {
+import { doc, updateDoc } from "firebase/firestore";
+import { firebaseFireStoreDB } from "../../firebase/config";
+import { async } from "@firebase/util";
+
+const WordReviewer: React.FC<{
+  word: IWordType;
+  deleteWordFromState: (id: string) => void;
+}> = ({ word, deleteWordFromState }) => {
   const [ShowTranslate, setShowTranslate] = useState<boolean>(false);
+  const [Loading, setLoading] = useState(false);
+
+  const updateDocument = async (status: EAnswerStatus) => {
+    setLoading(true);
+    try {
+      //
+      const currentDoc = doc(firebaseFireStoreDB, "words", word.id);
+      await updateDoc(currentDoc, {
+        ...word,
+        lastIssuedAt: Date.now(),
+        ...(status === EAnswerStatus.IKnow && {
+          success: word.success + 1,
+          history: [...word.history, { status: status, issuedAt: Date.now() }],
+        }),
+        ...(status === EAnswerStatus.IDonntKnow && {
+          failer: word.failer + 1,
+          success: word.success > 0 ? word.success - 1 : 0,
+          history: [...word.history, { status: status, issuedAt: Date.now() }],
+        }),
+      });
+      //
+      console.log("update success");
+      deleteWordFromState(word.id);
+      // setLoading(false);
+    } catch (error) {
+      console.log("error in change status of word", error);
+      setLoading(false);
+    }
+  };
 
   return (
     <IonCard>
@@ -34,24 +71,43 @@ const WordReviewer: React.FC<{ word: IWordType }> = ({ word }) => {
           )}
         </IonCardSubtitle>
         <IonCardSubtitle>
-          <IonIcon color="success" icon={checkmarkCircle} />
-          {word.success}
-          <IonIcon color="danger" icon={closeCircle} style={{ fontSize: 22 }} />
-          {word.failer}
-          <IonIcon color="primary" icon={caretForwardCircle} />
-          {word.history.length}
+          <span>
+            <IonIcon color="success" icon={checkmarkCircle} />
+            {word.success}
+          </span>
+          <span>
+            <IonIcon
+              color="danger"
+              icon={closeCircle}
+              style={{ fontSize: 22 }}
+            />
+            {word.failer}
+          </span>
+          <span>
+            <IonIcon color="primary" icon={caretForwardCircle} />
+            {word.history.length}
+          </span>
         </IonCardSubtitle>
       </IonCardHeader>
 
       <IonCardContent>
         <IonButtons>
-          <IonButton fill="solid" color={"success"}>
+          <IonButton
+            onClick={updateDocument.bind(null, EAnswerStatus.IKnow)}
+            fill="solid"
+            color={"success"}
+          >
             I know it
           </IonButton>
-          <IonButton fill="solid" color={"danger"}>
+          <IonButton
+            onClick={updateDocument.bind(null, EAnswerStatus.IDonntKnow)}
+            fill="solid"
+            color={"danger"}
+          >
             I don't know
           </IonButton>
         </IonButtons>
+        {Loading && <IonSpinner />}
       </IonCardContent>
     </IonCard>
   );

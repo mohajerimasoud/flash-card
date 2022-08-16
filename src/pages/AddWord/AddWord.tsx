@@ -61,6 +61,7 @@ const AddWord = () => {
         success: 0,
         failer: 0,
         createdDate: Date.now(),
+        lastIssuedAt: Date.now(),
       });
       console.log("Document written with ID: ", docRef.id);
       setLoading(false);
