@@ -24,6 +24,7 @@ import "./theme/variables.css";
 import Login from "./pages/Login/Login";
 import AddWord from "./pages/AddWord/AddWord";
 import Review from "./pages/Review/Review";
+import WordInfo from "./pages/WordInfo/WordInfo";
 
 setupIonicReact();
 
@@ -39,6 +40,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/review">
           <Review />
+        </Route>
+        <Route exact path="/word-info/:id">
+          <WordInfo />
         </Route>
         <Route exact path="/login">
           <Login />

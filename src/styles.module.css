@@ -5,3 +5,20 @@
   align-items: center;
   justify-content: center;
 }
+
+.word-status {
+  font-size: 22px;
+  padding: 3px;
+}
+
+.word-status-icon {
+}
+.word-status-text {
+  display: inline-block;
+  padding: 3px 3px 3px 3px;
+  vertical-align: text-bottom;
+}
+
+.word-button {
+  width: 33%;
+}

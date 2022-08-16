@@ -6,20 +6,15 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonIcon,
   IonSpinner,
+  IonText,
 } from "@ionic/react";
-import {
-  caretForwardCircle,
-  checkmarkCircle,
-  closeCircle,
-} from "ionicons/icons";
 import React, { useState } from "react";
 import { EAnswerStatus, IWordType } from "../../Types/app.types";
-
+import classes from "../../styles.module.css";
 import { doc, updateDoc } from "firebase/firestore";
 import { firebaseFireStoreDB } from "../../firebase/config";
-import { async } from "@firebase/util";
+import { useHistory } from "react-router";
 
 const WordReviewer: React.FC<{
   word: IWordType;
@@ -27,11 +22,11 @@ const WordReviewer: React.FC<{
 }> = ({ word, deleteWordFromState }) => {
   const [ShowTranslate, setShowTranslate] = useState<boolean>(false);
   const [Loading, setLoading] = useState(false);
+  const history = useHistory();
 
   const updateDocument = async (status: EAnswerStatus) => {
     setLoading(true);
     try {
-      //
       const currentDoc = doc(firebaseFireStoreDB, "words", word.id);
       await updateDoc(currentDoc, {
         ...word,
@@ -46,10 +41,7 @@ const WordReviewer: React.FC<{
           history: [...word.history, { status: status, issuedAt: Date.now() }],
         }),
       });
-      //
-      console.log("update success");
       deleteWordFromState(word.id);
-      // setLoading(false);
     } catch (error) {
       console.log("error in change status of word", error);
       setLoading(false);
@@ -63,51 +55,54 @@ const WordReviewer: React.FC<{
 
         <IonCardSubtitle>
           {ShowTranslate ? (
-            word.translate
+            <IonText color="dark" onClick={() => setShowTranslate(false)}>
+              <p>{word.translate}</p>
+            </IonText>
           ) : (
-            <IonButton onClick={() => setShowTranslate(true)} fill="clear">
+            <IonButton
+              onClick={() => setShowTranslate(true)}
+              fill="clear"
+              expand="block"
+            >
               Show Translation
             </IonButton>
           )}
-        </IonCardSubtitle>
-        <IonCardSubtitle>
-          <span>
-            <IonIcon color="success" icon={checkmarkCircle} />
-            {word.success}
-          </span>
-          <span>
-            <IonIcon
-              color="danger"
-              icon={closeCircle}
-              style={{ fontSize: 22 }}
-            />
-            {word.failer}
-          </span>
-          <span>
-            <IonIcon color="primary" icon={caretForwardCircle} />
-            {word.history.length}
-          </span>
         </IonCardSubtitle>
       </IonCardHeader>
 
       <IonCardContent>
         <IonButtons>
-          <IonButton
-            onClick={updateDocument.bind(null, EAnswerStatus.IKnow)}
-            fill="solid"
-            color={"success"}
-          >
-            I know it
-          </IonButton>
-          <IonButton
-            onClick={updateDocument.bind(null, EAnswerStatus.IDonntKnow)}
-            fill="solid"
-            color={"danger"}
-          >
-            I don't know
-          </IonButton>
+          {Loading ? (
+            <IonSpinner />
+          ) : (
+            <>
+              <IonButton
+                className={classes["word-button"]}
+                onClick={updateDocument.bind(null, EAnswerStatus.IKnow)}
+                fill="solid"
+                color="success"
+              >
+                I know ( {word.success} )
+              </IonButton>
+              <IonButton
+                className={classes["word-button"]}
+                onClick={updateDocument.bind(null, EAnswerStatus.IDonntKnow)}
+                fill="solid"
+                color="danger"
+              >
+                Idk ( {word.failer} )
+              </IonButton>
+              <IonButton
+                className={classes["word-button"]}
+                onClick={() => history.push(`/word-info/${word.id}`)}
+                fill="solid"
+                color="tertiary"
+              >
+                Info ( {word.history.length} )
+              </IonButton>
+            </>
+          )}
         </IonButtons>
-        {Loading && <IonSpinner />}
       </IonCardContent>
     </IonCard>
   );
