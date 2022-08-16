@@ -13,3 +13,7 @@
   font-size: 20px;
   vertical-align: -webkit-baseline-middle;
 }
+
+.half-button {
+  width: 50%;
+}

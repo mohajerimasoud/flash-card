@@ -4,7 +4,6 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardSubtitle,
   IonCardTitle,
   IonContent,
   IonHeader,
@@ -13,15 +12,10 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import {
-  addCircleSharp,
-  caretForwardCircle,
-  checkmarkCircle,
-  closeCircle,
-} from "ionicons/icons";
+import { addCircleSharp } from "ionicons/icons";
 import { useHistory } from "react-router";
 import { EContentType } from "../../Types/app.types";
-import "./Home.css";
+import classes from "../../styles.module.css";
 
 const Home: React.FC = () => {
   const history = useHistory();
@@ -42,21 +36,12 @@ const Home: React.FC = () => {
         <IonCard>
           <IonCardHeader>
             <IonCardTitle>Flash cards</IonCardTitle>
-
-            <IonCardSubtitle>
-              All words : 22 - learend words : 33
-            </IonCardSubtitle>
-            <IonCardSubtitle>
-              <IonIcon color="success" icon={checkmarkCircle}></IonIcon>
-              <IonIcon color="danger" icon={closeCircle}></IonIcon>
-              <IonIcon color="primary" icon={caretForwardCircle}></IonIcon>
-              learend words : 33
-            </IonCardSubtitle>
           </IonCardHeader>
 
           <IonCardContent>
             <IonButtons>
               <IonButton
+                className={classes["half-button"]}
                 fill="solid"
                 onClick={() => {
                   history.push(`/review?content=${EContentType.ALL}`);
@@ -65,6 +50,7 @@ const Home: React.FC = () => {
                 All words
               </IonButton>
               <IonButton
+                className={classes["half-button"]}
                 fill="solid"
                 onClick={() => {
                   history.push(`/review?content=${EContentType.TO_REVIEW}`);
@@ -73,6 +59,47 @@ const Home: React.FC = () => {
                 Review session
               </IonButton>
             </IonButtons>
+          </IonCardContent>
+        </IonCard>
+
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Performence analytics</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonButton fill="solid" color={"danger"} expand="block">
+              Comming soon ....
+            </IonButton>
+          </IonCardContent>
+        </IonCard>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Profile sync</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonButton fill="solid" color={"tertiary"} expand="block">
+              Comming soon ....
+            </IonButton>
+          </IonCardContent>
+        </IonCard>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Batch import and categories</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonButton fill="solid" color={"secondary"} expand="block">
+              Comming soon ....
+            </IonButton>
+          </IonCardContent>
+        </IonCard>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Profile sync</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonButton fill="solid" color={"success"} expand="block">
+              Comming soon ....
+            </IonButton>
           </IonCardContent>
         </IonCard>
       </IonContent>
