@@ -9,11 +9,15 @@ export enum EAnswerStatus {
   "IDonntKnow" = "IDonntKnow",
 }
 
+export interface IWordHistory {
+  issuedAt: number;
+  status: EAnswerStatus;
+}
 export interface IWordType {
   createdDate: number;
   lastIssuedAt: number;
   failer: number;
-  history: any[];
+  history: IWordHistory[];
   id: string;
   success: number;
   translate: string;

@@ -76,7 +76,7 @@ const AddWord = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Add a new world 🎉</IonTitle>
+          <IonTitle>Add a new word 🎉</IonTitle>
           <IonButtons slot="start">
             <IonBackButton defaultHref="/home" />
           </IonButtons>
