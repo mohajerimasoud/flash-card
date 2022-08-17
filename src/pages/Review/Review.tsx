@@ -9,15 +9,25 @@ import {
   IonTitle,
   IonToolbar,
   useIonToast,
-  useIonViewDidEnter,
   useIonViewWillEnter,
 } from "@ionic/react";
 
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { firebaseAuth, firebaseFireStoreDB } from "../../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { useHistory } from "react-router";
-import { EContentType, IWordType } from "../../Types/app.types";
+import {
+  EContentType,
+  IWordType,
+  miliSecondsOfOneDay,
+} from "../../Types/app.types";
 import WordReviewer from "../../components/WordReviewer/WordReviewer";
 
 import classes from "../../styles.module.css";
@@ -86,17 +96,16 @@ const Review: React.FC = () => {
         q = query(
           collection(firebaseFireStoreDB, "words"),
           where("user", "==", Id),
-          orderBy("createdDate", "asc")
+          orderBy("createdDate", "desc")
         );
       } else {
         q = query(
           collection(firebaseFireStoreDB, "words"),
           where("user", "==", Id),
-          where("success", "<", 8),
-          orderBy("success"),
-          orderBy("createdDate", "asc")
-          //       startAfter(lastVisible),
-          // limit(25)
+          where("reviewState", "==", true),
+          where("lastIssuedAt", "<", Date.now() - miliSecondsOfOneDay),
+          orderBy("lastIssuedAt", "asc"),
+          limit(20)
         );
       }
       const docs = await getDocs(q);

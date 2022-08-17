@@ -90,6 +90,7 @@ const WordInfo: React.FC = () => {
       await updateDoc(currentDoc, {
         ...Word,
         success: 0,
+        reviewState: true,
       });
       setReviewLoading(false);
       console.log("word added to review list again");

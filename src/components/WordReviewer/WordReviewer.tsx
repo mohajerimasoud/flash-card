@@ -32,12 +32,13 @@ const WordReviewer: React.FC<{
         ...word,
         lastIssuedAt: Date.now(),
         ...(status === EAnswerStatus.IKnow && {
-          success: word.success + 1,
+          success: word.success + 1 > 8 ? 8 : word.success + 1,
           history: [...word.history, { status: status, issuedAt: Date.now() }],
+          reviewState: word.success + 1 !== 8,
         }),
         ...(status === EAnswerStatus.IDonntKnow && {
           failer: word.failer + 1,
-          success: word.success > 0 ? word.success - 1 : 0,
+          success: 0,
           history: [...word.history, { status: status, issuedAt: Date.now() }],
         }),
       });

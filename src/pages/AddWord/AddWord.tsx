@@ -20,6 +20,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { firebaseFireStoreDB } from "../../firebase/config";
 import { getAuth } from "firebase/auth";
 import { useHistory } from "react-router";
+import { miliSecondsOfOneDay } from "../../Types/app.types";
 
 const AddWord = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -69,8 +70,9 @@ const AddWord = () => {
         history: [],
         success: 0,
         failer: 0,
+        reviewState: true,
         createdDate: Date.now(),
-        lastIssuedAt: Date.now(),
+        lastIssuedAt: Date.now() - miliSecondsOfOneDay - 1,
       });
       console.log("Document written with ID: ", docRef.id);
       setLoading(false);
