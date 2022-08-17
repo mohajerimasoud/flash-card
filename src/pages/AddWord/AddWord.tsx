@@ -6,12 +6,13 @@ import {
   IonHeader,
   IonInput,
   IonItem,
-  IonItemDivider,
+  IonLabel,
   IonList,
   IonPage,
   IonSpinner,
   IonTitle,
   IonToolbar,
+  useIonToast,
 } from "@ionic/react";
 import React, { useState } from "react";
 
@@ -21,6 +22,9 @@ import { getAuth } from "firebase/auth";
 import { useHistory } from "react-router";
 
 const AddWord = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [present, dismiss] = useIonToast();
+
   const [word, setWord] = useState<string>();
   const [translate, setTraslate] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,7 +52,12 @@ const AddWord = () => {
   const saveTheWord = async () => {
     setLoading(true);
     console.log(word, translate);
-    if (!translate || !translate) return;
+    if (!word || !translate) {
+      present("Both fields are mandatory . ", 2000);
+      setLoading(false);
+
+      return;
+    }
 
     //
     try {
@@ -68,6 +77,7 @@ const AddWord = () => {
       addWordSuccess();
     } catch (e) {
       console.error("Error adding document: ", e);
+      present("Some error occured, plz try again !  ", 2000);
       setLoading(false);
     }
   };
@@ -84,21 +94,20 @@ const AddWord = () => {
       </IonHeader>
       <IonContent fullscreen>
         <IonList className="ion-margin">
-          <IonItemDivider>The word you want to learn </IonItemDivider>
           <IonItem>
+            <IonLabel position="floating">The word you want to learn </IonLabel>
             <IonInput
               value={word}
-              placeholder="The Word"
               onIonChange={(e) => setWord(e.detail.value!)}
             ></IonInput>
           </IonItem>
-          <IonItemDivider>It's translate or description</IonItemDivider>
           <IonItem>
+            <IonLabel position="floating">
+              It's translate or description{" "}
+            </IonLabel>
             <IonInput
               value={translate}
-              placeholder="Translate / Description"
               onIonChange={(e) => setTraslate(e.detail.value!)}
-              clearInput
             ></IonInput>
           </IonItem>
         </IonList>

@@ -17,6 +17,7 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
+  useIonToast,
 } from "@ionic/react";
 import { useHistory, useParams } from "react-router";
 import { firebaseFireStoreDB } from "../../firebase/config";
@@ -32,6 +33,9 @@ import {
 import classes from "../../styles.module.css";
 
 const WordInfo: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [present, dismiss] = useIonToast();
+
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
   const [Word, setWord] = useState<IWordType>();
@@ -54,9 +58,13 @@ const WordInfo: React.FC = () => {
       setWord({ ...data, id });
       setLoading(false);
     } catch (error) {
-      console.log("error getting doc info", error);
       setLoading(false);
-      history.goBack();
+      console.log("error getting doc info", error);
+      present("Some error occured while getting the Word !  ", 2000).then(
+        () => {
+          history.goBack();
+        }
+      );
     }
   };
 
@@ -68,6 +76,7 @@ const WordInfo: React.FC = () => {
       setDeleteLoading(false);
       history.goBack();
     } catch (error) {
+      present("Some error occured while deleting the Word !  ", 2000);
       console.log("word delete failed", error);
       setDeleteLoading(false);
     }
@@ -84,8 +93,15 @@ const WordInfo: React.FC = () => {
       });
       setReviewLoading(false);
       console.log("word added to review list again");
+      present("word added to review list again !  ", 2000);
+
       history.goBack();
     } catch (error) {
+      present(
+        "Some error occured while adding the Word to review list !  ",
+        2000
+      );
+
       setReviewLoading(false);
       console.log("error in review word", error);
     }

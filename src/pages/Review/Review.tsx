@@ -8,6 +8,9 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
+  useIonToast,
+  useIonViewDidEnter,
+  useIonViewWillEnter,
 } from "@ionic/react";
 
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
@@ -20,6 +23,8 @@ import WordReviewer from "../../components/WordReviewer/WordReviewer";
 import classes from "../../styles.module.css";
 
 const Review: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [present, dismiss] = useIonToast();
   const [userId, setUserId] = useState<string>();
   const [contentType, setContentType] = useState<EContentType>();
   const [words, setWords] = useState<IWordType[]>([]);
@@ -38,6 +43,17 @@ const Review: React.FC = () => {
     }
   };
 
+  useIonViewWillEnter(() => {
+    if (userId) {
+      getUserDocs(userId);
+    }
+  }, [userId]);
+
+  useIonViewWillEnter(() => {
+    getContentType();
+    getUserID();
+  }, []);
+
   useEffect(() => {
     getContentType();
     getUserID();
@@ -55,7 +71,9 @@ const Review: React.FC = () => {
         const uid = user.uid;
         setUserId(uid);
       } else {
-        history.push("/login");
+        present("You need to login ", 2000).then(() => {
+          history.push("/login");
+        });
         throw new Error("uid not found");
       }
     });
@@ -93,6 +111,8 @@ const Review: React.FC = () => {
       setLoading(false);
       console.log("docs", data);
     } catch (error) {
+      present("Error getting docs ", 2000);
+      setLoading(false);
       console.log("error getting docs", error);
     }
   };
